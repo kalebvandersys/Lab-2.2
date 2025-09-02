@@ -1,4 +1,4 @@
-import {helloWorld, add, fetchRandomJoke} from '../js/main.js';
+import {helloWorld, add, fetchRandomJoke, fetch5RandomJokes} from '../js/main.js';
 // Import the sinon library to allow us to create a spy on the console.log function
 import sinon from 'sinon';
 
@@ -58,7 +58,7 @@ QUnit.module('main.js tests', function() {
         assert.equal(result, expected, 'add(2, -3) should return -1');
     });
 
-    QUnit.test('fetchRandomJoke should return a string', function(assert) {
+    QUnit.test('fetchRandomJoke should return a joke', function(assert) {
         //Arrange
         let testJoke = "test123";
         //Act
@@ -68,4 +68,53 @@ QUnit.module('main.js tests', function() {
         assert.false(testJoke == "test123", 'fetchRandomJoke should reassign the value of testJoke');
     });
 
+    QUnit.test('fetchRandomJoke should return a non-empty string', async function(assert) {
+        // Act
+        const joke = await fetchRandomJoke();
+
+        // Assert
+        assert.equal(typeof joke, 'string', 'fetchRandomJoke should return a string');
+        assert.ok(joke.length > 0, 'fetchRandomJoke should not return an empty string');
+        assert.ok(joke.includes(' - ') || joke.length > 10, 'fetchRandomJoke should look like a real joke');
+    });
+
+    QUnit.test('fetch5RandomJokes should return a multiple jokes', function(assert) {
+        //Arrange
+        let testJoke = "test123";
+        //Act
+        testJoke = fetch5RandomJokes();
+        //Assert
+        assert.true(testJoke != null, 'fetchRandomJoke should not return null');
+        assert.false(testJoke == "test123", 'fetchRandomJoke should reassign the value of testJoke');
+    });
+
+    QUnit.test('fetch5RandomJokes should return 5 formatted jokes', async function(assert) {
+        // Arrange: mock fetch with fake jokes
+        const fakeJokes = [
+            { setup: 'Setup1', punchline: 'Punchline1' },
+            { setup: 'Setup2', punchline: 'Punchline2' },
+            { setup: 'Setup3', punchline: 'Punchline3' },
+            { setup: 'Setup4', punchline: 'Punchline4' },
+            { setup: 'Setup5', punchline: 'Punchline5' },
+            { setup: 'Setup6', punchline: 'Punchline6' },
+        ];
+        const originalFetch = global.fetch;
+        global.fetch = async () => ({
+            ok: true,
+            json: async () => fakeJokes,
+        });
+
+        // Act
+        const result = await fetch5RandomJokes();
+
+        // Assert
+        assert.equal(result.length, 5, 'Should return exactly 5 jokes');
+        assert.equal(result[0], 'Setup1 - Punchline1', 'First joke should be formatted correctly');
+        result.forEach((joke, i) => {
+            assert.equal(typeof joke, 'string', `Joke ${i + 1} should be a string`);
+        });
+
+        // Cleanup
+        global.fetch = originalFetch;
+    });
 });
