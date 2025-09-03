@@ -18,7 +18,7 @@ This will install the necessary dependencies for the project.
 It is recommended to use the VSCode Live Server extension to run the project
 locally. You do not need to setup a local server to run the project. After installing the extension,
 click the name of the project at the top of VSCode, click show and run commands, then type and select
-"Live Preview:Start Server". 
+"Live Preview:Start Server". Then you can use the built in preview or paste the port it runs on in your browser. 
 
 ## Testing
 
