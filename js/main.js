@@ -7,10 +7,9 @@
  */
 
 /**
- * This function prints the string 'Hello World' to the console
+ * This function creates a browser alert
  */
 export function helloWorld() {
-    console.log('Hello World');
     alert("This is an alert!")
 }
 
