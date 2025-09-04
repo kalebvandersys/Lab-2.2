@@ -27,3 +27,7 @@ To run the tests for the project, run the following command:
 ```bash
 npm test
 ```
+
+## Sources
+
+I used ChatGPT for explaining some concepts and for making additional tests.
